@@ -1,6 +1,6 @@
 *Version: 1.0, Date: 25.06.2024*
 
-[![DOI](https://data.4tu.nl/v3/datasets/22215562/doi-badge.svg)](https://doi.org/10.4121/22093397)
+[![DOI](https://data.4tu.nl/v3/datasets/22215562/doi-badge.svg)](https://doi.org/10.4121/f5cfe2b8-2896-433a-887e-45c397d64ade)
 
 ### __Data to reproduce the paper: "Population balance modelling and reconstruction by quadrature method of moments for wet granulation"__
 
