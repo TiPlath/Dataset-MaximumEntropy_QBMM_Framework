@@ -34,6 +34,7 @@ Subfolders are named intuitively and the data inside subfolders should be descri
 ```
 Dataset/  
 ├── Chapter3_InitialMER.m						: MATLAB script for the initial MER reconstruction tested on a log-normal density distribution
+├── Chapter3_InitialMER_ExpTest.m					: MATLAB script for the initial MER reconstruction tested on an exponential function
 ├── Chapter4_ComputePSDError.m						: MATLAB script which compares the length-based and volume-based volume conservation error
 ├── Chapter4_QBMMNonDimensionalised.m					: MATLAB script which runs aggregation, breakage and growth special cases and compares it to analytical solutions
 ├── Chapter5_ConsistencyCheck.m						: MATLAB script which applies the DQMOM-MER framework to a twin-screw wet granulation dataset to check consistency

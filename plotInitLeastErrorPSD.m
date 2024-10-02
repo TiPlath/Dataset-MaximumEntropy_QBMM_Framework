@@ -51,7 +51,7 @@ for iterations = 1:it
     else
         cHigh = c;
     end
-    if iterations == 5
+    if iterations == it
         break
     end
     c = (cLow + cHigh)/2;

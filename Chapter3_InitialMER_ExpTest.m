@@ -18,13 +18,13 @@ clc
 % total volume
 V_P = 1;
 % Log-Normal distribution
-f_ = @(x,sigma,mu) (1./((sqrt(2*pi).*sigma.*x))) .* exp((-(log(x)-mu).^2 )./(2*sigma^2));
+f_ = @(x,x1,x2,x3,x4) exp(-(x-x1).*(x-x2).*(1.5.*x-x3).*(x-x4));
 %% test functions
 % Unimodal Log-Normal function
-x_f = linspace(1, 150, 1000)';
-f_uni = V_P * f_(x_f,1/4,3.5);
+x_f = linspace(0, 6, 300)';
+f_uni = V_P * f_(x_f,3,0,0,0);
 % Bimodal Log-Normal distribution
-f_bi = 0.5*V_P * f_(x_f,1/3,4) + 0.5*V_P * f_(x_f,1/7,4.5);
+f_bi = V_P * f_(x_f,3,3.4,4,4.4);
 
 reconstructUnimodal = 0;
 reconstructBimodal = 0;
@@ -53,8 +53,8 @@ M_bi = ComputeMoments(x_f, f_bi, mMax_bi);
 % we compute weights and nodes using the Wheeler algorithm
 [xi_uni,w_uni] = Wheeler(M_uni(1:2*N_uni),N_uni);
 [xi_bi,w_bi] = Wheeler(M_bi(1:2*N_bi),N_bi);
-
 % plot the initial delta-pdf by ME approach
+
 if reconstructUnimodal
     [R_uni,E_uni,M_uni_,initx_uni,initPSD_uni,c_uni,lambda_uni] = plotInitLeastErrorPSD(x_f,f_uni,xi_uni,M_uni,mMax_uni);
     figure(1)

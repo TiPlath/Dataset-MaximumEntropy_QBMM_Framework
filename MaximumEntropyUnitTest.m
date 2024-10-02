@@ -42,6 +42,43 @@ plot(x(1:10:end),yME(1:10:end),"o","DisplayName","ME2LambdaReassembled",LineWidt
 
 legend()
 
+
+%% bimodal reconstruction unit test
+expFunction6L = @(lambda,x) exp(-(lambda(1)+lambda(2)*x+lambda(3)*x.^2 + lambda(4)*x.^3 + lambda(5)*x.^4 + lambda(6)*x.^5));
+expFunction6LScaled =  @(lambda,x,M0) exp(-(lambda(1)+lambda(2)*x/max(x) + lambda(3)*(x/max(x)).^2 + + lambda(4)*(x/max(x)).^3 + lambda(5)*(x/max(x)).^4 + lambda(6)*(x/max(x)).^5))*M0/max(x);
+% define lambda
+lambda(1)=26.1059371508217;
+lambda(2)=-280.231702969230;
+lambda(3)=1136.18273943110;
+lambda(4)=-2191.77051839395;
+lambda(5)=1998.27371937431;
+lambda(6)=-686.468566706130;
+
+% number of moments
+N = length(lambda);
+x = linspace(0,1,300);
+y = expFunction6L(lambda,x);
+% plot function
+figure(2)
+plot(x,y,"DisplayName","analytic2Lambda",LineWidth=2)
+hold on
+
+M = ComputeMoments(x,y,N);
+
+[PSD,PSDErrorComp,k,E,lambdaME] = getPSD(x,M,N);
+
+plot(x,PSDErrorComp(k,:),"--","DisplayName","ME2Lambda",LineWidth=2,MarkerSize=6)
+
+%% reassemble function with LambdaME
+
+yME = expFunction6LScaled(lambdaME,x,M(1));
+
+MME = ComputeMoments(x,yME,N);
+
+plot(x(1:10:end),yME(1:10:end),"o","DisplayName","ME2LambdaReassembled",LineWidth=2,MarkerSize=6)
+
+legend()
+
 %% Doing the same with a number density distribution n_L (DOES NOT WORK WELL)
 % volume = x;
 % nL_expFunction2L = @(lambda,x) (exp(-(lambda(1)+lambda(2)*x))) ./ volume;
