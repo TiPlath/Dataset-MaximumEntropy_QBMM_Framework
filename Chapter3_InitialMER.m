@@ -21,10 +21,22 @@ V_P = 1;
 f_ = @(x,sigma,mu) (1./((sqrt(2*pi).*sigma.*x))) .* exp((-(log(x)-mu).^2 )./(2*sigma^2));
 %% test functions
 % Unimodal Log-Normal function
-x_f = linspace(1, 150, 150)';
+x_f = linspace(1, 150, 1000)';
 f_uni = V_P * f_(x_f,1/4,3.5);
 % Bimodal Log-Normal distribution
-f_bi = V_P/2 * f_(x_f,1/3,4) + V_P/2 * f_(x_f,1/7,4.5);
+f_bi = 0.5*V_P * f_(x_f,1/3,4) + 0.5*V_P * f_(x_f,1/7,4.5);
+
+reconstructUnimodal = 0;
+reconstructBimodal = 0;
+reply = input("Reconstruct unimodal or bimodal? \n1 = unimodal (default)\n2 = bimodal\n\n","s");
+switch reply
+    case "1"
+        reconstructUnimodal= 1;
+    case "2"
+        reconstructBimodal = 1;
+    otherwise
+        reconstructUnimodal = 1;
+end
 
 %% Define variables (pre-processing)
 % Number of dirac-delta distributed classes (weights and nodes, 1,...,7)
@@ -41,22 +53,29 @@ M_bi = ComputeMoments(x_f, f_bi, mMax_bi);
 % we compute weights and nodes using the Wheeler algorithm
 [xi_uni,w_uni] = Wheeler(M_uni(1:2*N_uni),N_uni);
 [xi_bi,w_bi] = Wheeler(M_bi(1:2*N_bi),N_bi);
+
 % plot the initial delta-pdf by ME approach
+if reconstructUnimodal
+    [R_uni,E_uni,M_uni_,initx_uni,initPSD_uni,c_uni,lambda_uni] = plotInitLeastErrorPSD(x_f,f_uni,xi_uni,M_uni,mMax_uni);
+    figure(1)
+    ylabel('$v_{\mathrm{L}}^{\mathrm{uni}}$ [mm$^2$]','FontSize',18,'Interpreter','Latex')
+    xlabel("$L$ [mm]")
+    stem(xi_uni,w_uni./(xi_uni), "filled", "DisplayName", "$\widetilde{v}_{\mathrm{L}}(t=0)/L_{\alpha}$", "LineWidth",2)
+    
+    % compute error
+    E_uni(E_uni==1) = [];
+    E_L_uni = sum(E_uni)/length(E_uni);
+end
 
-% [R_uni,E_uni,M_uni_,initx_uni,initPSD_uni,c_uni,lambda_uni] = plotInitLeastErrorPSD(x_f,f_uni,xi_uni,M_uni,mMax_uni);
-% figure(1)
-% ylabel('$v_{\mathrm{L}}^{\mathrm{uni}}$ [mm$^2$]','FontSize',18,'Interpreter','Latex')
-% xlabel("$L$ [mm]")
-% stem(xi_uni,w_uni./(xi_uni), "filled", "DisplayName", "$\widetilde{v}_{\mathrm{L}}(t=0)/L_{\alpha}$", "LineWidth",2)
+if reconstructBimodal
+    [R_bi,E_bi,M_bi_,initx_bi,initPSD_bi,c_bi,lambda_bi] = plotInitLeastErrorPSD(x_f,f_bi,xi_bi,M_bi,mMax_bi);
+    figure(1)
+    ylabel('$v_{\mathrm{L}}^{\mathrm{bi}}$ [mm$^2$]','FontSize',18,'Interpreter','Latex')
+    xlabel("$L$ [mm]")
+    stem(xi_bi,w_bi./(xi_bi), "filled", "DisplayName", "$\widetilde{v}_{\mathrm{L}}(t=0)/L_{\alpha}$", "LineWidth",2)
+    
+    % compute error
+    E_bi(E_bi==1) = [];
+    E_L_bi = sum(E_bi)/length(E_bi);
+end
 
-
-[R_bi,E_bi,M_bi_,initx_bi,initPSD_bi,c_bi,lambda_bi] = plotInitLeastErrorPSD(x_f,f_bi,xi_bi,M_bi,mMax_bi);
-figure(1)
-ylabel('$v_{\mathrm{L}}^{\mathrm{bi}}$ [mm$^2$]','FontSize',18,'Interpreter','Latex')
-xlabel("$L$ [mm]")
-stem(xi_bi,w_bi./(xi_bi), "filled", "DisplayName", "$\widetilde{v}_{\mathrm{L}}(t=0)/L_{\alpha}$", "LineWidth",2)
-
-E_uni(E_uni==1) = [];
-E_L_uni = sum(E_uni)/length(E_uni);
-% E_bi(E_bi==1) = [];
-% E_L_bi = sum(E_bi)/length(E_bi);
