@@ -1,5 +1,7 @@
 *Version: 1.0, Date: 25.06.2024*
- 
+
+[![DOI](https://data.4tu.nl/v3/datasets/22215562/doi-badge.svg)](https://doi.org/10.4121/22093397)
+
 ### __Data to reproduce the paper: "Population balance modelling and reconstruction by quadrature method of moments for wet granulation"__
 
 __Authors: Plath, Timo¹*; Luding, Stefan¹; Weinhart, Thomas¹__
